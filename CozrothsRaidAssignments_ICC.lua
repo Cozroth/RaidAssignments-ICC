@@ -4,13 +4,14 @@ local LibSerialize = LibStub("LibSerialize")
 local AceComm = LibStub:GetLibrary("AceComm-3.0")
 local Prefix = "COZ_CD_ASSIGN"
 
-aura_env.sendAssignsT9 = function(data)
+aura_env.sendAssigns = function(data)
     local serialized = LibSerialize:Serialize(data)
     local compressed = LibDeflate:CompressDeflate(serialized)
     local encoded = LibDeflate:EncodeForWoWAddonChannel(compressed)
     AceComm:SendCommMessage(Prefix, encoded, "RAID", nil)
 end
 
+------------ VARIABLES ----------------
 aura_env.AoL = false
 aura_env.pewpew = false
 aura_env.encounterName = ""
@@ -40,7 +41,8 @@ aura_env.encounterIds =
     --["Baltharus the Warborn"] = 890,
     --["General Zarithrian"] = 893,
     --["Saviana Ragefire"] = 891,
-}
+} 
+
 ---------- BOSS EMOTE TABLE ---------
 aura_env.yellEngageTriggers = {
     -- Lord Marrowgar
@@ -58,7 +60,6 @@ aura_env.yellEngageTriggers = {
     ["BY THE MIGHT OF THE LICH KING!"] = true, -- Encounter Start
 }
 
-
 ---------- BOSS ABILITY TABLE ---------
 aura_env.boss_abilities = {
     -- Icecrown Citadel
@@ -66,13 +67,11 @@ aura_env.boss_abilities = {
         SpellCastStart = {
             [69076] = true, -- Bonestorm - 3 sec cast
             [69057] = true, -- Bone Spike Graveyard - 3 sec cast
-            [73142] = true, -- Bone Spike Graveyard - 1 sec cast
-
+            [73142] = true, -- Bone Spike Graveyard - 1 sec cast            
         },
         SpellCastSuccess = {
             [69055] = true, -- Bone Slice
-            [69075] = true, -- Bone Storm DMG TICKS - Duration [10M Nrm - 20, HC - ][25M Nrm - 20, HC - 30]
-
+            [69075] = true, -- Bone Storm DMG TICKS - Duration [10M Nrm - 20, HC - ][25M Nrm - 20, HC - 30]            
         },
         SpellAuraAppliedRemoved = {
             [69076] = true, -- Bonestorm
@@ -80,7 +79,7 @@ aura_env.boss_abilities = {
             [69062] = true, -- Impale ??
             [72669] = true, -- Impale ??
             [72670] = true, -- Impale ??
-            [69146] = true, -- Coldflame
+            [69146] = true, -- Coldflame        },
         },
     },
     ["Lady Deathwhisper"] = {
@@ -108,11 +107,12 @@ aura_env.boss_abilities = {
             [69705] = true, -- Below Zero - 0.5 sec cast 
         },
         SpellCastSuccess = {
-
+            
         },
         SpellAuraAppliedRemoved = {
             [69705] = true, -- Below Zero - AURA_REMOVED >> Start Timer for next Application - 82 seconds to Ice Block and 60 seconds to Adds
         },
+    },
     ["Deathbringer Saurfang"] = {
         SpellCastStart = {
             [72293] = true, -- Mark of the Fallen Champion 1.5 sec cast
@@ -164,7 +164,7 @@ aura_env.boss_abilities = {
     ["Blood Prince Council"] = {
         SpellCastStart = {
             [0] = true, -- 
-             },
+        },
         SpellCastSuccess = {
             [0] = true, --
         },
@@ -210,7 +210,7 @@ aura_env.boss_abilities = {
             [69780] = true, -- Remorseless Winter - 2 sec cast
             [68981] = true, -- Remorseless Winter - 2.5 sec cast
             [72259] = true, -- Remorseless Winter - 2.5 sec cast
-
+            
             [69242] = true, -- Soul Shriek - 0.5 sec cast
             [70358] = true, -- Summon Drudge Ghouls - 0.5 sec cast
             [70372] = true, -- Summon Shambling Horror - 1 sec cast
@@ -237,7 +237,7 @@ aura_env.boss_abilities = {
             [68981] = true, -- Remorseless Winter - 60 sec duration
             [69781] = true, -- Remorseless Winter
             [68983] = true, -- Remorseless Winter
-
+            
             [69242] = true, -- Soul Shriek - 5 sec duration
             [69409] = true, -- Soul Reaper - 5 sec duration
             [70337] = true, -- Necrotic Plague - 15 sec duration
@@ -256,7 +256,7 @@ aura_env.boss_abilities = {
         SpellAuraAppliedRemoved = {
         },
     },
-
+    
     ["General Zarithrian"] = {
         SpellCastStart = {
         },
@@ -291,16 +291,16 @@ CD SPELL ID's
 10278, -- "Hand of Protection"
 642,   -- "Divine Shield"
 64843, -- "Divine Hymn"
-33206, -- "Pain Suppression"
+64843, -- "Pain Suppression"
 6940,  -- "Hand of Sacrifice"
 47788, -- "Guardian Spirit"
 1766, -- "Kick" > Change based on class in RECIEVER
 
 AURA SPELL ID's
 19746, -- Concentration Aura
-48947, -- Fire Resistance Aura
-48943, -- Shadow Resistance Aura
-48945, -- Frost Resistance Aura
+48947, -- Fire Resistance Aura 
+48943, -- Shadow Resistance Aura 
+48945, -- Frost Resistance Aura 
 --]]
 
 
@@ -308,16 +308,16 @@ AURA SPELL ID's
 
 --~~~~~~ SPLIT STRING TO ARRAY ~~~~~~--
 local function SplitMSG(msg, d)
-    local split_msg = {}
-    for part in msg:gmatch("([^" .. d .. "]+)") do
+    local split_msg = {} 
+    for part in msg:gmatch("([^"..d.."]+)") do
         table.insert(split_msg, part)
     end
     return split_msg
 end
 
 --~~~~~~ GENERATE THE ADDON MESSAGE ~~~~~~--
-aura_env.generateAddonMessage = function(spellId, count)
-    local addonMessages = {}
+aura_env.generateAddonMessage = function(spellId,count)
+    local addonMessages = {}      
     for bossSpellId, data in pairs(aura_env.newAssigns) do
         if bossSpellId == spellId then
             local order = data[count]
@@ -326,25 +326,25 @@ aura_env.generateAddonMessage = function(spellId, count)
                     local assignedPlayer = assigns[1]
                     local spellId = assigns[2]
                     local delay = assigns[3] or 0
-                    local amVariant = assigns[4] or 0
+                    local amVariant = assigns[4] or 0         
                     local customSound = assigns[5] or "default"
-                    local msg = assignedPlayer ..
-                        ";" .. spellId .. ";" .. delay .. ";" .. amVariant .. ";" .. customSound
+                    local msg = assignedPlayer .. ";" .. spellId .. ";" .. delay .. ";" .. amVariant .. ";".. customSound
                     table.insert(addonMessages, msg)
                 end
             end
         end
-    end
+    end      
     return addonMessages
 end
 --~~~~~~~~~~ Import Assignments From Sheet ~~~~~~~~~~~--
 aura_env.getImportedAssignments = function()
+    
     local rawImport = strtrim(aura_env.config.ImportOptions.assignments, " \"\t\r\n")
     --local importString = strtrim(aura_env.config.ImportOptions.assignments, " \"\t\r\n")
     local assignmentsImport = ""
     local countersImport = ""
     local inCounters = false
-
+    
     for line in rawImport:gmatch("[^\r\n]+") do
         if line:match("^%[") then
             inCounters = true
@@ -358,77 +358,90 @@ aura_env.getImportedAssignments = function()
             assignmentsImport = assignmentsImport .. line
         end
     end
-
-
+    
+    
     local splitAssignments = SplitMSG(assignmentsImport, ",")
     local splitCounters = SplitMSG(countersImport, ",")
-
+    
     local newAssignments = {}
     local resetCounters = {}
-
+    
     local dataSizeAssigns = 7
     local dataSizeCounters = 2
-
+    
     local numRangesAssigns = math.ceil((#splitAssignments) / dataSizeAssigns)
     local numRangesCounters = math.ceil((#splitCounters) / dataSizeCounters)
-
-    --[[
-  print("\nImport Error Controller\nAre the Numbers Matching?\n",
-    "Assignments values should match: ",#splitAssignments, "/", dataSizeAssigns, " = ",
-    numRangesAssigns, "|", #splitAssignments/dataSizeAssigns, "\n",
-    "Counter Reset values should match: ",#splitCounters, "/", dataSizeCounters, " = ",
-  numRangesCounters, "|", #splitCounters/dataSizeCounters, "\n")
-  --]]
+    
+    if aura_env.config.debug.importController then
+        print("|cfffe7a00","[Cozroth's-Sender]:", "|r", "Do the","|cff55d0ff", "BLUE","|r" ,"Numbers Match?")
+        print("|cfffe7a00","[Cozroth's-Sender]:", "|r", "Assignments values: ", #splitAssignments, "/", dataSizeAssigns, " = ",
+        "|cff55d0ff", #splitAssignments/dataSizeAssigns, "|r", "|","|cff55d0ff", numRangesAssigns,"|r")
+        print("|cfffe7a00","[Cozroth's-Sender]:", "|r", "Do the","|cffffee55", "YELLOW", "|r", "Numbers Match?")
+        print("|cfffe7a00","[Cozroth's-Sender]:", "|r", "Counter Reset values: ",#splitCounters, "/", dataSizeCounters, " = ",
+        "|cffffee55",#splitCounters/dataSizeCounters, "|r", "|","|cffffee55", numRangesCounters, "|r")
+        
+        if #splitAssignments/dataSizeAssigns == numRangesAssigns and #splitCounters/dataSizeCounters == numRangesCounters then
+            print("|cfffe7a00","[Cozroth's-Sender]:", "|r", "|cff77ff55", "Successfully generated Assignments from Imported String","|r")
+        else
+            print("|cfffe7a00","[Cozroth's-Sender]:", "|r", "|cffff0000", "WARNING!", "|r")
+            print("|cfffe7a00","[Cozroth's-Sender]:", "|r","|cffff5555", "Could NOT genereate the Assignments from imported String", "|r")
+        end
+    end
+    
     for i = 1, numRangesAssigns do
         local bossSpellId = tonumber(strtrim(splitAssignments[i * dataSizeAssigns - 6])) or 0
-        local order = tonumber(strtrim(splitAssignments[i * dataSizeAssigns - 5])) or 1
+        local order = tonumber(strtrim(splitAssignments[i * dataSizeAssigns - 5])) or 1  
         local player = strtrim(splitAssignments[i * dataSizeAssigns - 4]) or ""
         local spellId = tonumber(strtrim(splitAssignments[i * dataSizeAssigns - 3])) or 0
         local delay = tonumber(strtrim(splitAssignments[i * dataSizeAssigns - 2])) or 1
         local amVariant = tonumber(strtrim(splitAssignments[i * dataSizeAssigns - 1])) or 0
         local customSound = strtrim(splitAssignments[i * dataSizeAssigns - 0]) or "default"
         local assignment = { player, spellId, delay, amVariant, customSound }
-
+        
         if not newAssignments[bossSpellId] then
             newAssignments[bossSpellId] = {}
         end
-
+        
         if not newAssignments[bossSpellId][order] then
             newAssignments[bossSpellId][order] = {}
         end
-
+        
         table.insert(newAssignments[bossSpellId][order], assignment)
     end
-
-    for i = 1, numRangesCounters do
+    
+    for i = 1, numRangesCounters do 
         local bossSpellId = tonumber(strtrim(splitCounters[i * dataSizeCounters - 1])) or 0
         local resetCount = tonumber(strtrim(splitCounters[i * dataSizeCounters - 0])) or 0
-
+        
         if not resetCounters[bossSpellId] then
             resetCounters[bossSpellId] = {}
         end
-
+        
         table.insert(resetCounters[bossSpellId], resetCount)
     end
     return newAssignments, resetCounters
 end
 
 --[[
---Import should look like this 
+
+Import should look like this
 
 bossSpellId,order,playerName,cdToUse,delay,amVariant,customSound
+    bossSpellId = the boss ability spell ID
+    order = the Order to use the assignments 1 = the first time the boss uses a spell
+    playerName = the name of the character being assigned
+    cdToUse = spell ID of the assigned CD that the player should use
+    delay = delay in seconds when to use the CD (in seconds), default to 1
+    amVariant = IF the cdToUse is Aura Mastery, this should be assigned to the spell ID of the AURA to use with Aura Mastery, otherwise 0
+    customSound = the path to the custom sound. This should be set to default if no custom sound are given!
 
-bossSpellId = the boss ability spell ID
-order = the Order to use the assignments 1 = the first time the boss uses a spell
-playerName = the name of the character being assigned
-cdToUse = spell ID of the assigned CD that the player should use
-delay = delay in seconds when to use the CD (in seconds), default to 1
-amVariant = IF the cdToUse is Aura Mastery, this should be assigned to the spell ID of the AURA to use with Aura Mastery, otherwise 0
-customSound = the path to the custom sound. This should be set to default if no custom sound are given!
-
+EXAMPLE WITH NO CUSTOM SOUND:
 48785,1,Kozroth,70940,1,0,default,
 48785,2,Kozroth,10278,1,0,default,
 -----------------------------------------
-48785,2,Kozroth,1766,1,0,Interface\Addons\FolderPathToYourSound\sound\Aura Mastery.ogg,
+
+EXAMPLE WITH A CUSTOM SOUND:
+48785,2,Kozroth,1766,1,0,Interface\Addons\FolderPathToYourSound\sound\Divine Hymn.ogg,
 48782,1,Kozroth,31821,1,19746,Interface\Addons\FolderPathToYourSound\sound\Aura Mastery.ogg,
+-----------------------------------------
 --]]
