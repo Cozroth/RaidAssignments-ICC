@@ -414,7 +414,7 @@ aura_env.getImportedAssignments = function()
 end
 
 --[[
---Import should look like this
+--Import should look like this 
 
 bossSpellId,order,playerName,cdToUse,delay,amVariant,customSound
 
@@ -424,10 +424,11 @@ playerName = the name of the character being assigned
 cdToUse = spell ID of the assigned CD that the player should use
 delay = delay in seconds when to use the CD (in seconds), default to 1
 amVariant = IF the cdToUse is Aura Mastery, this should be assigned to the spell ID of the AURA to use with Aura Mastery, otherwise 0
-customSound = the name of the customSound (not yet implemented)
+customSound = the path to the custom sound. This should be set to default if no custom sound are given!
 
-48785,1,Kozroth,70940,1,0,
-48785,2,Kozroth,10278,1,0,
-48785,2,Kozroth,1766,1,0,
-48782,1,Kozroth,31821,1,19746,
+48785,1,Kozroth,70940,1,0,default,
+48785,2,Kozroth,10278,1,0,default,
+-----------------------------------------
+48785,2,Kozroth,1766,1,0,Interface\Addons\FolderPathToYourSound\sound\Aura Mastery.ogg,
+48782,1,Kozroth,31821,1,19746,Interface\Addons\FolderPathToYourSound\sound\Aura Mastery.ogg,
 --]]
