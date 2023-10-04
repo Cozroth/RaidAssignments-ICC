@@ -492,3 +492,4 @@ EXAMPLE WITH A CUSTOM SOUND:
 48782,1,Kozroth,31821,1,19746,Interface\Addons\FolderPathToYourSound\sound\Aura Mastery.ogg,
 -----------------------------------------
 --]]
+
